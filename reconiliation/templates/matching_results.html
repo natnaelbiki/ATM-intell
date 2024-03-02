@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Matching Results</h2>
+<div>
+    <!-- Display matching results here -->
+    {% for result in matching_results %}
+    <p>{{ result }}</p>
+    {% empty %}
+    <p>No results found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

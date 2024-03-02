@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <title>Upload and Clean Financial Report</title>
+    <style>
+        /* Add your inline CSS styles here */
+        .progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload Financial Report</h2>
+    <form id="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="button" id="upload-button">Upload and Clean</button>
+    </form>
+    <br />
+    <br />
+    <div id="progress-container" style="width: 40%; background-color: #ddd;">
+        <div id="progress-bar" class="progress-bar">0%</div>
+    </div>
+
+    <script>
+        const uploadButton = document.getElementById('upload-button');
+        const form = document.getElementById('upload-form');
+        const progressBar = document.getElementById('progress-bar');
+
+        uploadButton.addEventListener('click', function() {
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '', true);  // Post to current URL
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentage = Math.round((event.loaded / event.total) * 100);
+                    progressBar.style.width = percentage + '%';
+                    progressBar.textContent = percentage + '%';
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Reset progress bar and alert user
+                    progressBar.style.width = '0%';
+                    progressBar.textContent = '0%';
+                    alert('File successfully cleaned and ready for download.');
+                    window.location.href = xhr.responseURL;  // Redirect to download link if needed
+                } else {
+                    alert('Failed to upload file.');
+                }
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+</body>
+{% endblock %}

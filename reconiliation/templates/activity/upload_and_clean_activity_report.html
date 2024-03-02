@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <title>Upload and Clean Activity Report</title>
+    <style>
+        /* Add your inline CSS styles here */
+        .progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload Activity Report</h2>
+    <form id="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload and Clean</button>
+    </form>
+    <br />
+    <br />
+</body>
+{% endblock %}

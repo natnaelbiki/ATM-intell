@@ -1,0 +1,145 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Digital AI tool{% endblock title %}</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: black;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+        .nav-item {
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 140px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1001;
+        }
+        .nav-item:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .container {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="navbar-logo">
+        <img src="{% static 'cbelogo.png' %}" alt="Logo"> <!-- Update path to your logo -->
+        <span>CBE</span>
+    </div>
+     {% if user.is_authenticated %}
+    <div class="nav-menu">
+        <div class="nav-item"><a href="{% url 'reports_view' %}" style="color: white; text-decoration: none;">Table Matching</a></div>
+        <div class="nav-item"><a href="{% url 'full_match_view' %}" style="color: white; text-decoration: none;">Full Matching</a></div>
+        <div class="nav-item">
+            View Report
+            <div class="dropdown-content">
+                <a href="{% url 'view_financial_report' %}">Financial Report</a>
+                <a href="{% url 'view_activity_report' %}">Activity Report</a>
+            </div>
+        </div>
+
+        <div class="nav-item">
+            Upload Report
+            <div class="dropdown-content">
+                <a href="{% url 'upload_financial_report' %}">Financial Report</a>
+                <a href="{% url 'upload_activity_report' %}">Activity Report</a>
+            </div>
+        </div>
+
+        <div class="nav-item">
+            Clean Report
+            <div class="dropdown-content">
+                <a href="{% url 'clean_financial_report' %}">Financial Report</a>
+                <a href="{% url 'clean_activity_report' %}">Activity Report</a>
+            </div>
+        </div>
+
+
+        <div class="nav-item">
+            Account
+            <div class="dropdown-content">
+                <a href="{% url 'clear_data' %}">Clear Database</a>
+                <a href="{% url 'password_change' %}">Change Password</a>
+                <a href="{% url 'logout' %}">Logout {{ user.username }}</a>
+            </div>
+        </div>
+
+        <div class="nav-item">          
+        </div>
+        <div class="nav-item">           
+        </div>
+        <div class="nav-item">          
+        </div>
+        <div class="nav-item">           
+        </div>
+
+    </div>
+    {% else %}
+    <div class="nav-item"><a href="{% url 'register' %}" style="color: white; text-decoration: none;">Register</a></div>
+        <div class="nav-item"><a href="{% url 'login' %}" style="color: white; text-decoration: none;">login</a></div>
+      <div class="nav-item">          
+        </div>
+        <div class="nav-item">           
+        </div>
+        <div class="nav-item">          
+        </div>
+        <div class="nav-item">           
+        </div>
+
+    {% endif %}
+</div>
+
+<div class="container">
+    {% block content %}
+    <!-- Page specific content will go here -->
+    {% endblock content %}
+</div>
+
+</body>
+</html>

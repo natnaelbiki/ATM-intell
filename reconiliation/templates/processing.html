@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reconcilation AI Tool</title>
+</head>
+<body>
+    <h1>{{ status }}</h1>
+    {% if file_name %}
+    <a href="{% url 'download_view' file_name %}" download="{{ file_name }}">Download File</a>
+    {% endif %}
+    <br />
+    <a href="{% url 'upload-file' %}" >Back to Upload</a>
+</body>
+</html>

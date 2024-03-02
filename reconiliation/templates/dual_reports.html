@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="report-table">
+    <h2>Financial Reports</h2>
+    <table>
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Filter</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Bank</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">TID</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date Start</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date End</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Account</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Status</th>
+            </tr>
+        </thead>
+        <tr>
+            <form method="get" style="display: inline-block;">
+                <td><button type="submit">Filter Financial</button></td>           
+                    {% for field in financial_form %}
+                <td>{{ field.label_tag }}{{ field }}</td> <!-- Display label and field in the same cell -->
+                    {% endfor %}
+            </form>
+        </tr>
+        <tbody>
+    {% for report in financial_reports %}
+    <tr>
+      <th scope="row">{{ report.pk }}</th>
+      <td>{{ report.bank }}</td>
+      <td>{{ report.TERMINAL_ID }}</td>
+      <td>{{ report.BUSINESS_DATE }}</td>
+      <td>{{ financial_filter.business_date_end.value }}</td>
+      <td>{{ report.FROM_ACCOUNT_NO }}</td>
+      <td> {{ report.STATUS }}</td>
+    </tr>
+    {% empty %}
+    <tr>No reports available.</tr>
+    {% endfor %}
+</tbody>
+        <!-- Table headers and rows for Financial Reports -->
+
+    </table>
+        <!-- Paginator for Financial Reports -->
+</div>
+<div class="report-table">
+    <h2>Activity Reports</h2>
+    <table>
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Filter</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Bank</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">TID</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date Start</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date End</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Account</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Amount</th>
+            </tr>
+        </thead>
+        <tr>
+            <form method="get" style="display: inline-block;">
+                <td><button type="submit">Filter Activity</button></td>                
+                    {% for field in activity_form %}
+                <td>{{ field.label_tag }}{{ field }}</td> <!-- Display label and field in the same cell -->
+                    {% endfor %}
+            </form>
+        </tr>
+        <tbody>
+    {% for report in activity_reports  %}
+    <tr>
+      <th scope="row">{{ report.pk }}</th>
+      <td>{{ report.bank }}</td>
+      <td>{{ report.ATM_BR_NUMBER }}</td>
+      <td>{{ report.TXN_DATE }}</td>
+      <td>{{ activity_filter.txn_date_end.value }}</td>
+      <td>{{ report.DR_ACCT }}</td>
+      <td>{{ report.TXN_AMOUNT }}</td>
+    </tr>
+    {% empty %}
+    <tr>No reports available.</tr>
+    {% endfor %}
+</tbody>
+    </table>
+        <!-- Paginator for Activity Reports -->
+</div>
+<form method="post" action="{% url 'match_reports' %}">
+    {% csrf_token %}
+    <button type="submit" name="action" value="match">Match and Download</button>
+</form>
+{% endblock %}

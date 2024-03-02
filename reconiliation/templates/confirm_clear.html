@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <title>Confirm Data Clear</title>
+</head>
+<body>
+    <h2>Are you sure you want to delete all data from Financial and Activity Reports?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, clear all data</button>
+    </form>
+    <a href="{% url 'home' %}">Cancel</a>
+</body>
+  {% endblock %}

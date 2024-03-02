@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Table Matching</title>
+    <style>
+        .matches-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .matches-table th, .matches-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .matches-table th {
+            background-color: #f2f2f2;
+        }
+        textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Upload or Paste Financial and Activity Reports for Matching</h2>
+    <form method="post" enctype="multipart/form-data" style="margin-bottom: 20px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 24px; border: none; cursor: pointer;">Process</button>
+    </form>
+    
+    {% if matches %}
+    <div style="overflow-x:auto;">
+        <h3 style="text-align:center;">Matched Results</h3>
+        {{ matches|safe }}
+    </div>
+    {% endif %}
+</body>
+</html>
+{% endblock %}

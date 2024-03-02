@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center><h2 style="margin-top: 20px;">Financial Record {{ count }}</h2></center>
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">No</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Bank</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">TID</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Account</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td colspan="6">
+        <form method="get" style="display: flex; justify-content: space-between; padding: 8px;">
+          <tr style="background-color: #f2f2f2;">
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"> <div>
+    <button type="submit" name="download" value="true">Download Excel</button>
+  </div></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><select name="bank" style="padding: 4px; margin-right: 10px;">
+            <!-- Bank options -->
+             <option value="">Select Bank</option>
+            {% for value, label in BANK_CHOICES %}
+            <option value="{{ value }}" {% if value == bank_filter %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><input type="text" name="terminal_id" placeholder="Terminal ID" value="{{ filters.terminal_id }}"></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Start:    <input type="date" name="business_date_start" placeholder="Start Business Date" value="{{ business_date_start }}"> End:
+      <input type="date" name="business_date_end" placeholder="Business Date" value="{{ business_date_end }}"></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><input type="text" name="from_account_no" placeholder="From Account No" value="{{ filters.from_account_no }}"></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><select name="status">
+        <option value="">Select Status</option>
+        {% for value, label in STATUS_CHOICES %}
+        <option value="{{ value }}" {% if value == status_filter %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+  </th>
+  <th>
+    <button type="submit">Filter</button>
+  </th>
+    </tr>
+          <!-- Form fields here, ensure each input/select has appropriate inline styles -->
+          
+          
+          <!-- Additional form inputs -->
+          
+        </form>
+      </td>
+    </tr>
+    <!-- Table rows for financial records -->
+    <tbody>
+    {% for report in financial_reports %}
+    <tr>
+      <th scope="row">{{ report.pk }}</th>
+      <td>{{ report.bank }}</td>
+      <td>{{ report.TERMINAL_ID }}</td>
+      <td>{{ report.BUSINESS_DATE }}</td>
+      <td>{{ report.FROM_ACCOUNT_NO }}</td>
+      <td> {{ report.STATUS }}</td>
+    </tr>
+    {% empty %}
+    <tr>No reports available.</tr>
+    {% endfor %}
+</tbody>
+</tbody>
+</table>
+<br />
+    <br />
+<!-- Pagination Controls for Financial Records -->
+<div class="pagination">
+        <span class="step-links">
+            {% if financial_reports.has_previous %}
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page=1{% if bank_filter %}&bank={{ bank_filter }}{% endif %}">first</a>
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ financial_reports.previous_page_number }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}">previous</a>
+            {% endif %}
+            
+            <span style="padding: 5px;" class="current">
+                Page {{ financial_reports.number }} of {{ financial_reports.paginator.num_pages }}.
+            </span>
+            
+            {% if financial_reports.has_next %}
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ financial_reports.next_page_number }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}">next</a>
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ financial_reports.paginator.num_pages }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}">last</a>
+            {% endif %}
+        </span>
+    </div>
+    <br />
+    <br />
+    <div>
+{% endblock %}
+

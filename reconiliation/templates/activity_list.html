@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center><h2 style="margin-top: 20px;">Activity Record {{ count }}</h2></center>
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">No</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Bank</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">TID</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Date</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Account</th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Amount</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td colspan="6">
+        <form method="get" style="display: flex; justify-content: space-between; padding: 8px;">
+          <tr style="background-color: #f2f2f2;">
+<th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"> <div>
+    <button type="submit" name="download" value="true">Download Excel</button>
+  </div></th>      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+        <select name="bank" class="custom-select mr-sm-2">
+            <option value="">Choose Bank...</option>
+            <option value="CBE" {% if request.GET.bank == "CBE" %}selected{% endif %}>CBE</option>
+            <option value="Other" {% if request.GET.bank == "Other" %}selected{% endif %}>Other</option>
+        </select>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+        <input type="text" name="terminal_id" placeholder="Terminal ID" value="{{ filters.terminal_id }}"></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Start:    <input type="date" name="txn_date_start" value="{{ txn_date_start }}"> End:
+      <input type="date" name="txn_date_end" value="{{ txn_date_end }}"></th>
+      <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><input type="text" name="from_account_no" placeholder="From Account No" value="{{ from_account_no }}"></th>
+  </th>
+  <th>
+    <button type="submit">Filter</button>
+  </th>
+    </tr>
+          <!-- Form fields here, ensure each input/select has appropriate inline styles -->
+          
+          
+          <!-- Additional form inputs -->
+          
+        </form>
+      </td>
+    </tr>
+    <!-- Table rows for financial records -->
+    <tbody>
+    {% for report in activity_reports  %}
+    <tr>
+      <th scope="row">{{ report.pk }}</th>
+      <td>{{ report.bank }}</td>
+      <td>{{ report.ATM_BR_NUMBER }}</td>
+      <td>{{ report.TXN_DATE }}</td>
+      <td>{{ report.DR_ACCT }}</td>
+      <td>{{ report.TXN_AMOUNT }}</td>
+    </tr>
+    {% empty %}
+    <tr>No reports available.</tr>
+    {% endfor %}
+</tbody>
+</table>
+<br />
+    <br />
+<!-- Pagination Controls for Financial Records -->
+<div class="pagination">
+        <span class="step-links">
+            {% if activity_reports.has_previous %}
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page=1{% if bank_filter %}&bank={{ bank_filter }}{% endif %}{% if terminal_id_filter %}&terminal_id_filter={{ terminal_id_filter }}{% endif %}{% if from_account_no_filter %}&from_account_no_filter={{ from_account_no_filter }}{% endif %}{% if txn_date_start %}&txn_date_start={{ txn_date_start }}{% endif %}{% if txn_date_end %}&txn_date_end={{ txn_date_end }}{% endif %}">first</a>
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ activity_reports.previous_page_number }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}{% if terminal_id_filter %}&terminal_id_filter={{ terminal_id_filter }}{% endif %}{% if from_account_no_filter %}&from_account_no_filter={{ from_account_no_filter }}{% endif %}{% if txn_date_start %}&txn_date_start={{ txn_date_start }}{% endif %}{% if txn_date_end %}&txn_date_end={{ txn_date_end }}{% endif %}">previous</a>
+            {% endif %}
+            
+            <span style="padding: 5px;" class="current">
+                Page {{ activity_reports.number }} of {{ activity_reports.paginator.num_pages }}.
+            </span>
+            
+            {% if activity_reports.has_next %}
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ activity_reports.next_page_number }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}{% if terminal_id_filter %}&terminal_id_filter={{ terminal_id_filter }}{% endif %}{% if from_account_no_filter %}&from_account_no_filter={{ from_account_no_filter }}{% endif %}{% if txn_date_start %}&txn_date_start={{ txn_date_start }}{% endif %}{% if txn_date_end %}&txn_date_end={{ txn_date_end }}{% endif %}">next</a>
+                <a style="padding: 5px; background-color: #ddd; color: black; text-decoration: none;" href="?page={{ activity_reports.paginator.num_pages }}{% if bank_filter %}&bank={{ bank_filter }}{% endif %}{% if terminal_id_filter %}&terminal_id_filter={{ terminal_id_filter }}{% endif %}{% if from_account_no_filter %}&from_account_no_filter={{ from_account_no_filter }}{% endif %}{% if txn_date_start %}&txn_date_start={{ txn_date_start }}{% endif %}{% if txn_date_end %}&txn_date_end={{ txn_date_end }}{% endif %}">last</a>
+            {% endif %}
+        </span>
+    </div>
+    <br />
+    <br />
+{% endblock %}

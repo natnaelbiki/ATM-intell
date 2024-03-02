@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Filter Financial Report</h2>
+    <form method="get" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="download" value="true">Download Filtered Report</button>
+    </form>
+    {% endblock %}

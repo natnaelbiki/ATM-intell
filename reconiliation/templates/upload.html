@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Data</title>
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Function to handle paste for financial data
+        $('#paste-financial').click(async function() {
+            try {
+                const text = await navigator.clipboard.readText();
+                $('#id_financial_data').val(text);
+            } catch (err) {
+                console.error('Failed to read clipboard contents: ', err);
+            }
+        });
+        // Function to handle paste for activity data
+        $('#paste-activity').click(async function() {
+            try {
+                const text = await navigator.clipboard.readText();
+                $('#id_activity_data').val(text);
+            } catch (err) {
+                console.error('Failed to read clipboard contents: ', err);
+            }
+        });
+    });
+    </script>
+</head>
+<body>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        {{ form.financial_file.label_tag }}: {{ form.financial_file }}<br>
+        {{ form.financial_data.label_tag }}:<br>
+        {{ form.financial_data }}
+        <button type="button" id="paste-financial">Paste Financial Data</button>
+    </div>
+    <div>
+        {{ form.activity_file.label_tag }}: {{ form.activity_file }}<br>
+        {{ form.activity_data.label_tag }}:<br>
+        {{ form.activity_data }}
+        <button type="button" id="paste-activity">Paste Activity Data</button>
+    </div>
+    <button type="submit">Upload/Paste Data</button>
+</form>
+
+</body>
+</html>
+
+{% endblock %}
+
